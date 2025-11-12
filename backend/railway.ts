@@ -51,31 +51,51 @@ app.use(
 );
 
 app.get("/", (c) => {
+    console.log("📥 Root endpoint hit");
     return c.json({
         status: "ok",
         message: "Akyedee Money Transfer API is running",
+        timestamp: new Date().toISOString(),
+        port: process.env.PORT || 3000,
+        environment: process.env.NODE_ENV || 'development'
+    });
+});
+
+app.get("/health", (c) => {
+    console.log("🏥 Health endpoint hit");
+    return c.json({
+        status: "healthy",
+        service: "akyedee-api",
+        version: "1.0.0",
         timestamp: new Date().toISOString(),
         port: process.env.PORT || 3000
     });
 });
 
-app.get("/health", (c) => {
+// Add a catch-all for debugging
+app.all("*", (c) => {
+    console.log(`❓ Unmatched request: ${c.req.method} ${c.req.path}`);
     return c.json({
-        status: "healthy",
-        service: "akyedee-api",
-        version: "1.0.0",
+        error: "Route not found",
+        method: c.req.method,
+        path: c.req.path,
         timestamp: new Date().toISOString()
-    });
+    }, 404);
 });
 
 const port = Number(process.env.PORT) || 3000;
 
-console.log(`🚀 Starting Akyedee Money Transfer API on port ${port}`);
+console.log(`🚀 Starting Akyedee Money Transfer API`);
+console.log(`📍 Port: ${port}`);
+console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+console.log(`🚂 Railway Environment: ${process.env.RAILWAY_ENVIRONMENT || 'false'}`);
+console.log(`🗂️  Working Directory: ${process.cwd()}`);
 
 // Start the server
 serve({
     fetch: app.fetch,
     port: port,
+    hostname: '0.0.0.0', // Bind to all interfaces for Railway
+}, (info) => {
+    console.log(`✅ Server running on ${info.address}:${info.port}`);
 });
-
-console.log(`✅ Server running on port ${port}`);

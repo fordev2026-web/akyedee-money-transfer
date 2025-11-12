@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy package files first for better caching
 COPY package*.json ./
 
-# Install dependencies (including dev deps for build)
+# Install ALL dependencies (including dev deps for TypeScript build)
 RUN npm ci --legacy-peer-deps
 
 # Copy the entire project
@@ -20,11 +20,10 @@ RUN npx tsc backend/railway.ts --outDir dist --target ES2022 --module ES2022 --m
 RUN echo '{"type":"module"}' > dist/package.json
 
 # Verify the build
-RUN ls -la dist/ && echo "✅ Build complete"
+RUN ls -la dist/ && cat dist/railway.js | head -5
 
 # Clean up dev dependencies to reduce image size
 RUN npm prune --production --legacy-peer-deps
 
-# Railway automatically sets the PORT environment variable
 # Start the backend application
 CMD ["node", "dist/railway.js"]

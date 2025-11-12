@@ -1,4 +1,6 @@
-import app from './hono';
+import app from './hono.js';
+import { createContext } from './trpc/create-context.js'; // <-- add .js
+import { appRouter } from './trpc/app-router.js'; // <-- add .js
 
 const port = process.env.PORT || 3000;
 

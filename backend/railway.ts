@@ -6,6 +6,7 @@ import superjson from "superjson";
 import { z } from "zod";
 import { serve } from "@hono/node-server";
 
+
 // Simple context
 const createContext = async () => ({});
 type Context = Awaited<ReturnType<typeof createContext>>;
@@ -84,18 +85,34 @@ app.all("*", (c) => {
 });
 
 const port = Number(process.env.PORT) || 3000;
+const host = '0.0.0.0';
 
 console.log(`🚀 Starting Akyedee Money Transfer API`);
 console.log(`📍 Port: ${port}`);
+console.log(`🔗 Host: ${host}`);
 console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
 console.log(`🚂 Railway Environment: ${process.env.RAILWAY_ENVIRONMENT || 'false'}`);
 console.log(`🗂️  Working Directory: ${process.cwd()}`);
 
 // Start the server
-serve({
+const server = serve({
     fetch: app.fetch,
     port: port,
-    hostname: '0.0.0.0', // Bind to all interfaces for Railway
+    hostname: host,
 }, (info) => {
-    console.log(`✅ Server running on ${info.address}:${info.port}`);
+    console.log(`✅ Server is ready and listening!`);
+    console.log(`📡 Address: ${info.address}:${info.port}`);
+    console.log(`🌐 Public URL: ${process.env.RAILWAY_PUBLIC_DOMAIN || 'localhost:' + port}`);
+    console.log(`💚 Health check available at: /health`);
+});
+
+// Handle graceful shutdown
+process.on('SIGTERM', () => {
+    console.log('⚠️  SIGTERM received, shutting down gracefully...');
+    process.exit(0);
+});
+
+process.on('SIGINT', () => {
+    console.log('⚠️  SIGINT received, shutting down gracefully...');
+    process.exit(0);
 });

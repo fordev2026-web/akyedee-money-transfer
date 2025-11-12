@@ -1,11 +1,12 @@
+import { publicProcedure } from "../../create-context.js"; // <-- add .js
 import { z } from "zod";
-import { publicProcedure } from "@/backend/trpc/create-context";
 
-export default publicProcedure
-  .input(z.object({ name: z.string() }))
-  .mutation(({ input }) => {
+const hiRoute = publicProcedure
+  .input(z.object({ name: z.string() })) // add typing for input
+  .mutation(({ input }: { input: { name: string } }) => { // fix TS7031
     return {
-      hello: input.name,
-      date: new Date(),
+      greeting: `Hello ${input.name}`,
     };
   });
+
+export default hiRoute;

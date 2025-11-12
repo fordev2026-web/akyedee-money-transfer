@@ -17,6 +17,11 @@ app.use(
   })
 );
 
+// ✅ Health check route for Railway
+app.get("/health", (c) => {
+  return c.json({ status: "ok" });
+});
+
 app.get("/", (c) => {
   return c.json({ status: "ok", message: "API is running" });
 });

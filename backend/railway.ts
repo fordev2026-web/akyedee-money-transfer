@@ -4,6 +4,7 @@ import { cors } from "hono/cors";
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { z } from "zod";
+import { serve } from "@hono/node-server";
 
 // Simple context
 const createContext = async () => ({});
@@ -53,7 +54,8 @@ app.get("/", (c) => {
     return c.json({
         status: "ok",
         message: "Akyedee Money Transfer API is running",
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        port: process.env.PORT || 3000
     });
 });
 
@@ -61,28 +63,19 @@ app.get("/health", (c) => {
     return c.json({
         status: "healthy",
         service: "akyedee-api",
-        version: "1.0.0"
+        version: "1.0.0",
+        timestamp: new Date().toISOString()
     });
 });
 
 const port = Number(process.env.PORT) || 3000;
 
-console.log(`🚀 Akyedee Money Transfer API starting on port ${port}`);
+console.log(`🚀 Starting Akyedee Money Transfer API on port ${port}`);
 
-// Start the server for Railway deployment
-if (process.env.NODE_ENV === 'production' || process.env.RAILWAY_ENVIRONMENT) {
-    console.log('Starting server in production mode...');
+// Start the server
+serve({
+    fetch: app.fetch,
+    port: port,
+});
 
-    // Use Bun's built-in server
-    Bun.serve({
-        fetch: app.fetch,
-        port: port,
-        hostname: '0.0.0.0', // Listen on all interfaces for Railway
-    });
-
-    console.log(`✅ Server running on port ${port}`);
-} else {
-    console.log('Exporting app for development...');
-}
-
-export default app;
+console.log(`✅ Server running on port ${port}`);

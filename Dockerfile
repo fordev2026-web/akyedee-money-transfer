@@ -23,4 +23,4 @@ RUN npm ci --only=production --legacy-peer-deps && npm cache clean --force
 EXPOSE 3000
 
 # Start the application
-CMD ["node", "dist/standalone.js"]
+CMD ["node", "dist/railway.js"]

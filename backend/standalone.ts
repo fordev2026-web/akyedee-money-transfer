@@ -69,20 +69,7 @@ const port = Number(process.env.PORT) || 3000;
 
 console.log(`🚀 Akyedee Money Transfer API starting on port ${port}`);
 
-// Start the server for Railway deployment
-if (process.env.NODE_ENV === 'production' || process.env.RAILWAY_ENVIRONMENT) {
-    console.log('Starting server in production mode...');
-
-    // Use Bun's built-in server
-    Bun.serve({
-        fetch: app.fetch,
-        port: port,
-        hostname: '0.0.0.0', // Listen on all interfaces for Railway
-    });
-
-    console.log(`✅ Server running on port ${port}`);
-} else {
-    console.log('Exporting app for development...');
-}
+// Export app for development - do not auto-start server
+console.log('Exporting app for development use...');
 
 export default app;

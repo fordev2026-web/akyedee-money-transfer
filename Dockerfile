@@ -19,8 +19,8 @@ RUN npm run backend:build
 # Remove dev dependencies to reduce image size
 RUN npm ci --only=production --legacy-peer-deps && npm cache clean --force
 
-# Expose the port
-EXPOSE 3000
+# Railway automatically sets the PORT environment variable
+# Don't hardcode EXPOSE - Railway handles port binding
 
 # Start the application
 CMD ["node", "dist/railway.js"]

@@ -10,14 +10,14 @@ COPY package*.json ./
 # Copy all source files
 COPY . .
 
-# Install all dependencies (including dev dependencies for build)
-RUN npm ci
+# Install all dependencies (including dev dependencies for build) with legacy peer deps
+RUN npm ci --legacy-peer-deps
 
 # Build the backend
 RUN npm run backend:build
 
 # Remove dev dependencies to reduce image size
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --only=production --legacy-peer-deps && npm cache clean --force
 
 # Expose the port
 EXPOSE 3000

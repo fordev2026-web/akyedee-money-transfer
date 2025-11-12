@@ -4,7 +4,7 @@
         "builder": "DOCKERFILE"
     },
     "deploy": {
-        "startCommand": "node dist/backend/hono.js",
+        "startCommand": "node dist/railway.js",
         "restartPolicyType": "ON_FAILURE",
         "restartPolicyMaxRetries": 10
     }

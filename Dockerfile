@@ -13,8 +13,11 @@ RUN npm ci --legacy-peer-deps
 # Copy source code
 COPY . .
 
-# Build the backend with explicit TypeScript compilation
-RUN npx tsc backend/railway.ts --outDir dist --target ES2022 --module CommonJS --moduleResolution node --esModuleInterop --allowSyntheticDefaultImports --skipLibCheck
+# Build the backend with ES modules instead of CommonJS
+RUN npx tsc backend/railway.ts --outDir dist --target ES2022 --module ES2022 --moduleResolution bundler --esModuleInterop --allowSyntheticDefaultImports --skipLibCheck
+
+# Create a package.json in dist to mark it as ES module
+RUN echo '{"type":"module"}' > dist/package.json
 
 # Verify the build output exists
 RUN ls -la dist/ && cat dist/railway.js | head -10

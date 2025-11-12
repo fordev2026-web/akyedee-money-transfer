@@ -1,0 +1,41 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": [
+            "ES2023"
+        ],
+        "module": "Node16",
+        "moduleResolution": "node16",
+        "allowImportingTsExtensions": false,
+        "noEmit": false,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "./*"
+            ]
+        },
+        "outDir": "dist",
+        "declaration": false,
+        "declarationMap": false,
+        "sourceMap": false
+    },
+    "include": [
+        "backend/**/*",
+        "types/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "app/**/*",
+        "components/**/*",
+        "assets/**/*"
+    ]
+}
